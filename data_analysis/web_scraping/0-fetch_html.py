@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """Fetch HTML content from a URL."""
 
