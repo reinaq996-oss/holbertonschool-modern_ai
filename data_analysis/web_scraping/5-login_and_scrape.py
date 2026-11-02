@@ -23,20 +23,12 @@ def login_and_scrape(login_url, user, pwd):
         response.raise_for_status()
 
         soup = BeautifulSoup(response.text, 'html.parser')
-        csrf_input = soup.find('input', attrs={'name': 'csrf_token'})
+        csrf_input = soup.find(
+            'input',
+            attrs={'name': 'csrf_token'}
+        )
 
-        csrf_token = soup.find(
-    'input',
-    attrs={'name': 'csrf_token'}
-    ).get('value')
-
-payload = {
-    'username': user,
-    'password': pwd,
-    'csrf_token': csrf_token
-}
-
-        csrf_token = csrf_input.get('value', '')
+        csrf_token = csrf_input.get('value', '') if csrf_input else ''
 
         payload = {
             'username': user,
@@ -58,18 +50,9 @@ payload = {
         soup = BeautifulSoup(response.text, 'html.parser')
 
         for quote in soup.find_all('div', class_='quote'):
-            text_element = quote.find(
-                'span',
-                class_='text'
-            )
-            author_element = quote.find(
-                'small',
-                class_='author'
-            )
-            tag_elements = quote.find_all(
-                'a',
-                class_='tag'
-            )
+            text_element = quote.find('span', class_='text')
+            author_element = quote.find('small', class_='author')
+            tag_elements = quote.find_all('a', class_='tag')
 
             quotes.append({
                 'text': text_element.get_text(strip=True)
