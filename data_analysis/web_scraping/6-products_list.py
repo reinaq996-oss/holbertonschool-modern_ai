@@ -9,7 +9,7 @@ import time
 from selenium import webdriver
 
 
-def scrape_products_list(url):
+def scrape_products(url):
     """Scrape product details from a category page.
 
     Opens the page in headless Chrome (1920x1080, no sandbox), waits
@@ -54,3 +54,6 @@ def scrape_products_list(url):
     finally:
         driver.quit()
     return products
+
+
+scrape_products_list = scrape_products
