@@ -28,7 +28,13 @@ def login_and_scrape(login_url, user, pwd):
             attrs={'name': 'csrf_token'}
         )
 
-        csrf_token = csrf_input.get('value', '') if csrf_input else ''
+        if csrf_input is None:
+            raise TypeError("'NoneType' object is not subscriptable")
+
+        csrf_token = csrf_input.get('value')
+
+        if csrf_token is None:
+            raise TypeError("'NoneType' object is not subscriptable")
 
         payload = {
             'username': user,
