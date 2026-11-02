@@ -8,13 +8,36 @@ import time
 from selenium import webdriver
 
 
+def _wait_for_growth(driver, last_height, scroll_pause):
+    """Wait until the page grows or the pause expires.
+
+    Args:
+        driver: Selenium WebDriver instance.
+        last_height (int): Page height before the last scroll.
+        scroll_pause (float): Maximum seconds to wait.
+
+    Returns:
+        int: The new page height (equal to last_height on timeout).
+    """
+    deadline = time.time() + scroll_pause
+    height = last_height
+    while time.time() < deadline:
+        time.sleep(0.1)
+        height = driver.execute_script(
+            'return document.body.scrollHeight'
+        )
+        if height > last_height:
+            return height
+    return height
+
+
 def scroll_and_scrape(url, scroll_pause=2.0):
     """Scroll to load all products and extract unique product details.
 
     Opens the page in headless Chrome (1920x1080, no sandbox), scrolls
-    to the bottom repeatedly, waiting ``scroll_pause`` seconds each
-    time, until the page height stops increasing. Duplicate products
-    are skipped by tracking (title, price) pairs.
+    to the bottom repeatedly, waiting up to ``scroll_pause`` seconds
+    each time, until the page height stops increasing. Duplicate
+    products are skipped by tracking (title, price) pairs.
 
     Args:
         url (str): URL of the infinite-scroll product page.
@@ -36,7 +59,6 @@ def scroll_and_scrape(url, scroll_pause=2.0):
     seen = set()
     try:
         driver.get(url)
-        time.sleep(scroll_pause)
         last_height = driver.execute_script(
             'return document.body.scrollHeight'
         )
@@ -44,9 +66,8 @@ def scroll_and_scrape(url, scroll_pause=2.0):
             driver.execute_script(
                 'window.scrollTo(0, document.body.scrollHeight);'
             )
-            time.sleep(scroll_pause)
-            new_height = driver.execute_script(
-                'return document.body.scrollHeight'
+            new_height = _wait_for_growth(
+                driver, last_height, scroll_pause
             )
             if new_height <= last_height:
                 break
