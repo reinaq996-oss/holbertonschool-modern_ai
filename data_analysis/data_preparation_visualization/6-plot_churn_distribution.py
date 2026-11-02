@@ -1,28 +1,17 @@
 #!/usr/bin/env python3
-"""Module that plots the churn class distribution of a dataset."""
+"""Visualizes the churn class distribution as a bar plot."""
 import matplotlib.pyplot as plt
 
 
-
-
 def plot_churn_distribution(df):
-    """Plot the distribution of the Churn column as a bar plot.
+    """Plot a bar chart of Churn value counts (No skyblue, Yes salmon)."""
+    churn_counts = df["Churn"].value_counts()
+    colors = ["skyblue" if label == "No" else "salmon"
+              for label in churn_counts.index]
 
-    The bar for 'No' is drawn in skyblue and the bar for 'Yes' in
-    salmon, regardless of the order of the value counts.
-
-    Args:
-        df (pandas.DataFrame): DataFrame containing a 'Churn' column
-            with the values 'No' and 'Yes'.
-
-    Returns:
-        None
-    """
     plt.figure(figsize=(12, 8))
-
-    counts = df['Churn'].value_counts()
-    colors = ['skyblue' if label == 'No' else 'salmon'
-              for label in counts.index]
-
-    plt.bar(counts.index, counts.values, color=colors)
+    plt.bar(churn_counts.index, churn_counts.values, color=colors)
+    plt.title("Churn Distribution")
+    plt.ylabel("Count")
     plt.show()
+EOF
