@@ -41,7 +41,7 @@ def scrape_product_detail(url, delay=2.0):
             'css selector', 'p.description'
         )
         stars = driver.find_elements(
-            'css selector', '.ratings p.ws-icon.ws-icon-star'
+            'css selector', '.ratings .ws-icon-star'
         )
         return {
             'title': title,
@@ -51,4 +51,3 @@ def scrape_product_detail(url, delay=2.0):
         }
     finally:
         driver.quit()
-        
