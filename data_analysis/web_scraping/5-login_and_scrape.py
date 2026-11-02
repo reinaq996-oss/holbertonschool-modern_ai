@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """Log in to a website and scrape its quotes."""
 
@@ -26,8 +25,16 @@ def login_and_scrape(login_url, user, pwd):
         soup = BeautifulSoup(response.text, 'html.parser')
         csrf_input = soup.find('input', attrs={'name': 'csrf_token'})
 
-        if csrf_input is None:
-            return quotes
+        csrf_token = soup.find(
+    'input',
+    attrs={'name': 'csrf_token'}
+    ).get('value')
+
+payload = {
+    'username': user,
+    'password': pwd,
+    'csrf_token': csrf_token
+}
 
         csrf_token = csrf_input.get('value', '')
 
