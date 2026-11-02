@@ -3,6 +3,8 @@
 import matplotlib.pyplot as plt
 
 
+
+
 def plot_churn_distribution(df):
     """Plot the distribution of the Churn column as a bar plot.
 
