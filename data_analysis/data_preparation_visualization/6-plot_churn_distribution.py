@@ -14,4 +14,3 @@ def plot_churn_distribution(df):
     plt.title("Churn Distribution")
     plt.ylabel("Count")
     plt.show()
-EOF
