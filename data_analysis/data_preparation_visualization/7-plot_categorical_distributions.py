@@ -1,6 +1,5 @@
-
 #!/usr/bin/env python3
-"""Module that plots categorical feature distributions."""
+""" Module that plots categorical feature distributions."""
 
 import math
 import matplotlib.pyplot as plt
