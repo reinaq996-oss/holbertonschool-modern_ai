@@ -12,10 +12,12 @@ def encode_features(df):
 
     binary_columns = ['Partner', 'Dependents', 'PaperlessBilling',
                       'SeniorCitizen']
-    binary_oe = preprocessing.OrdinalEncoder(
-        categories=[['No', 'Yes'] for _ in binary_columns], dtype='int64'
-    )
-    encoded[binary_columns] = binary_oe.fit_transform(encoded[binary_columns])
+    binary_oe = preprocessing.OrdinalEncoder(categories=[['No', 'Yes']])
+    binary_oe.fit(encoded[binary_columns].to_numpy().reshape(-1, 1))
+    for column in binary_columns:
+        encoded[column] = binary_oe.transform(
+            encoded[[column]].to_numpy()
+        ).ravel().astype('int64')
 
     tenure_oe = preprocessing.OrdinalEncoder(dtype='int64')
     encoded[['TenureGroup']] = tenure_oe.fit_transform(
