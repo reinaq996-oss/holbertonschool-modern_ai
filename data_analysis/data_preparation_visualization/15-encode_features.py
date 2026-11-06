@@ -19,10 +19,10 @@ def encode_features(df):
             encoded[[column]].to_numpy()
         ).ravel().astype('int64')
 
-    tenure_oe = preprocessing.OrdinalEncoder(dtype='int64')
+    tenure_oe = preprocessing.OrdinalEncoder()
     encoded[['TenureGroup']] = tenure_oe.fit_transform(
         encoded[['TenureGroup']]
-    )
+    ).astype('int64')
 
     one_hot_columns = ['Contract', 'PaymentMethod']
     one_hot = preprocessing.OneHotEncoder(drop='first', dtype='int64')
